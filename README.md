@@ -63,3 +63,10 @@ int main(int argc, char* argv[])
     return 0;
 }
 ```
+
+## Compile & Install
+> Here is how to install it on your system:
+
+    make && sudo make install
+
+> Enjoy!

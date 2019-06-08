@@ -52,7 +52,8 @@ obj_T* obj_load_from_file(const char* filename)
     if (fp == NULL)
         exit(1);
 
-    while ((read = getline(&line, &len, fp)) != -1) {
+    while ((read = getline(&line, &len, fp)) != -1)
+    {
         buff = realloc(buff, (sizeof(char) * (strlen(buff) + strlen(line) + 1)));
         strcat(buff, line);
     }

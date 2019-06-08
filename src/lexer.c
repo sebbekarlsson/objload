@@ -28,8 +28,13 @@ token_T* lexer_get_next_token(lexer_T* lexer)
 {
     while (lexer->current_char != '\0' && lexer->char_index < strlen(lexer->contents) - 1)
     {
-        while (lexer->current_char == ' ' || (int) lexer->current_char == 10)
-            lexer_skip_whitespace(lexer);
+        while (lexer->current_char == '#')
+        {
+            lexer_advance(lexer);
+        }
+
+        while (lexer->current_char == ' ' || (int) lexer->current_char == 10 || (int) lexer->current_char == 13)
+            lexer_skip_whitespace(lexer); 
 
         if (isdigit(lexer->current_char) || lexer->current_char == '-')
             return lexer_collect_number(lexer);
@@ -129,7 +134,7 @@ token_T* lexer_get_next_token(lexer_T* lexer)
             case '.': return lexer_advance_with_token(lexer, TOKEN_DOT); break;
             case '<': return lexer_advance_with_token(lexer, TOKEN_LESS_THAN); break;
             case '>': return lexer_advance_with_token(lexer, TOKEN_LARGER_THAN); break;
-            default: printf("unexpected %c\n", lexer->current_char); exit(1); break;
+            default: printf("unexpected %c (%d)\n", lexer->current_char, (int) lexer->current_char); exit(1); break;
         }
     }
 
@@ -163,7 +168,7 @@ void lexer_expect_char(lexer_T* lexer, char c)
 
 void lexer_skip_whitespace(lexer_T* lexer)
 {
-    while (lexer->current_char == ' ' || (int) lexer->current_char == 10)
+    while (lexer->current_char == ' ' || (int) lexer->current_char == 10 || (int) lexer->current_char == 13)
         lexer_advance(lexer);
 }
 

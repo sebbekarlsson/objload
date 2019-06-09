@@ -19,4 +19,8 @@ void parser_parse(parser_T* parser);
 void parser_parse_vector(parser_T* parser);
 
 void parser_parse_face(parser_T* parser);
+
+void parser_parse_material_reference(parser_T* parser);
+
+void parser_parse_material_usage(parser_T* parser);
 #endif

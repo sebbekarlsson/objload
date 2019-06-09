@@ -32,6 +32,7 @@ typedef struct TOKEN_STRUCT
         TOKEN_LESS_THAN,
         TOKEN_LARGER_THAN,
         TOKEN_AND,
+        TOKEN_OBJECT_NAME,
         TOKEN_EOF,
     } type;
 

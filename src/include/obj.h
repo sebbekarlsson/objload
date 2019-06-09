@@ -19,9 +19,14 @@ typedef struct OBJ_VECTOR_STRUCT
 
 typedef struct OBJ_FACE_STRUCT
 {
-    unsigned int vertex_pointers[3];    // v1, v2, v3
-    unsigned int texcoord_pointers[3];  // vt1, vt2, vt3
-    unsigned int normal_pointers[3];    // vt1, vt2, vt3
+    unsigned int* vertex_pointers;    // v1, v2, v3
+    size_t vertex_pointers_size;
+
+    unsigned int* texcoord_pointers;  // vt1, vt2, vt3
+    size_t texcoord_pointers_size;
+
+    unsigned int* normal_pointers;    // vt1, vt2, vt3
+    size_t normal_pointers_size;
 } obj_face_T;
 
 typedef struct OBJ_STRUCT

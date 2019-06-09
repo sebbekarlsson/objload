@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[])
 {
-    obj_T* obj = obj_load_from_file("shards/teapot.obj");
+    obj_T* obj = obj_load_from_file("shards/Wood.obj");
 
     for (int i = 0; i < obj->vectors_size; i++)
     {

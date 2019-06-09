@@ -67,8 +67,15 @@ void parser_parse(parser_T* parser)
         if (strcmp(parser->current_token->value, "s") == 0)
         {
             parser_eat(parser, TOKEN_ID);
-            parser_eat(parser, TOKEN_ID);
+
+            if (parser->current_token->type == TOKEN_ID)
+                parser_eat(parser, TOKEN_ID);
+            else
+                parser_eat(parser, TOKEN_INTEGER_VALUE);
         }
+
+        if (strcmp(parser->current_token->value, "l") == 0)
+            parser_parse_line_elements(parser);
     }
 }
 
@@ -184,4 +191,12 @@ void parser_parse_material_usage(parser_T* parser)
 {
     parser_eat(parser, TOKEN_ID); // usemtl
     parser_eat(parser, TOKEN_ID); // external .mtl filename
+}
+
+void parser_parse_line_elements(parser_T* parser)
+{
+    parser_eat(parser, TOKEN_ID); // l
+
+    while (parser->current_token->type == TOKEN_INTEGER_VALUE)
+        parser_eat(parser, TOKEN_INTEGER_VALUE);
 }

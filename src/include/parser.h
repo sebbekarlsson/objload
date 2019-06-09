@@ -23,4 +23,6 @@ void parser_parse_face(parser_T* parser);
 void parser_parse_material_reference(parser_T* parser);
 
 void parser_parse_material_usage(parser_T* parser);
+
+void parser_parse_line_elements(parser_T* parser);
 #endif

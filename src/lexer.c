@@ -44,7 +44,7 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         while (lexer->current_char == ' ' || (int) lexer->current_char == 10 || (int) lexer->current_char == 13)
             lexer_skip_whitespace(lexer);
 
-        if (lexer->current_char == 'o')
+        if (lexer->current_char == 'o' || lexer->current_char == 'g')
         {
             lexer_advance(lexer);
 
@@ -296,7 +296,7 @@ token_T* lexer_collect_id(lexer_T* lexer)
     char* buffer = calloc(1, sizeof(char));
     buffer[0] = '\0';
 
-    while (isalnum(lexer->current_char) || lexer->current_char == '_' || lexer->current_char == '.')
+    while (isalnum(lexer->current_char) || lexer->current_char == '_' || lexer->current_char == '.' || lexer->current_char == '-')
     {
         char* strchar = char_to_string(lexer->current_char);
         buffer = realloc(buffer, strlen(buffer) + 2);

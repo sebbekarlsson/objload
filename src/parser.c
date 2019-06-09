@@ -45,7 +45,6 @@ void parser_parse(parser_T* parser)
             if (strcmp(parser->current_token->value, "usemtl") == 0)
                 parser_parse_material_usage(parser);
         }
-
         // lets just ignore this for now
         if (parser->current_token->type == TOKEN_OBJECT_NAME)
             parser_eat(parser, TOKEN_OBJECT_NAME);
@@ -92,22 +91,22 @@ void parser_parse_vector(parser_T* parser)
     obj_vec_T* vec = calloc(1, sizeof(struct OBJ_VECTOR_STRUCT));
     vec->type = vector_type;
 
-    if (parser->current_token->type == TOKEN_FLOAT_VALUE)
+    if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
         vec->x = atof(parser->current_token->value);
-        parser_eat(parser, TOKEN_FLOAT_VALUE);
+        parser_eat(parser, parser->current_token->type);
     }
 
-    if (parser->current_token->type == TOKEN_FLOAT_VALUE)
+    if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
         vec->y = atof(parser->current_token->value);
-        parser_eat(parser, TOKEN_FLOAT_VALUE);
+        parser_eat(parser, parser->current_token->type);
     }
 
-    if (parser->current_token->type == TOKEN_FLOAT_VALUE)
+    if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
         vec->z = atof(parser->current_token->value);
-        parser_eat(parser, TOKEN_FLOAT_VALUE);
+        parser_eat(parser, parser->current_token->type);
     }
 
     obj_T* obj = parser->obj;

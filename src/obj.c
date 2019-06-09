@@ -51,9 +51,13 @@ obj_T* obj_load_from_file(const char* filename)
     size_t len = 0;
     ssize_t read;
 
+    printf("Opening %s for reading.\n", filename);
+
     fp = fopen(filename, "r");
     if (fp == NULL)
         exit(1);
+
+    printf("Reading %s line by line...\n", filename);
 
     while ((read = getline(&line, &len, fp)) != -1)
     {
@@ -67,7 +71,11 @@ obj_T* obj_load_from_file(const char* filename)
 
     lexer_T* lexer = init_lexer(buff);
     parser_T* parser = init_parser(lexer);
+
+    printf("Parsing %s...\n", filename);
     parser_parse(parser);
+
+    printf("Done loading %s\n.", filename);
 
     obj_T* obj = parser->obj;
 

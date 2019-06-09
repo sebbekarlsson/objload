@@ -55,14 +55,10 @@ void parser_parse(parser_T* parser)
             strcmp(parser->current_token->value, "vt") == 0 ||
             strcmp(parser->current_token->value, "vn") == 0
         )
-        {
             parser_parse_vector(parser);
-        }
 
         if (strcmp(parser->current_token->value, "f") == 0)
-        {
             parser_parse_face(parser);
-        }
 
         if (strcmp(parser->current_token->value, "s") == 0)
         {

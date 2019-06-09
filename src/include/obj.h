@@ -34,6 +34,9 @@ typedef struct OBJ_STRUCT
     obj_vec_T** vectors;
     size_t vectors_size;
 
+    obj_vec_T** texture_vectors;
+    size_t texture_vectors_size;
+
     obj_face_T** faces;
     size_t faces_size;
 } obj_T;

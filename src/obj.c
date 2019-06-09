@@ -13,6 +13,9 @@ obj_T* init_obj()
     obj->vectors = calloc(1, sizeof(struct OBJ_VECTOR_STRUCT));
     obj->vectors_size = 0;
 
+    obj->texture_vectors = calloc(1, sizeof(struct OBJ_VECTOR_STRUCT));
+    obj->texture_vectors_size = 0;
+
     obj->faces = calloc(1, sizeof(struct OBJ_FACE_STRUCT));
     obj->faces_size = 0;
 

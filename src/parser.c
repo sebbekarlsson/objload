@@ -90,6 +90,7 @@ void parser_parse_vector(parser_T* parser)
     parser_eat(parser, TOKEN_ID);
 
     obj_vec_T* vec = calloc(1, sizeof(struct OBJ_VECTOR_STRUCT));
+    vec->type = vector_type;
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE)
     {
@@ -111,9 +112,18 @@ void parser_parse_vector(parser_T* parser)
 
     obj_T* obj = parser->obj;
 
-    obj->vectors_size += 1;
-    obj->vectors = realloc(obj->vectors, obj->vectors_size * sizeof(struct OBJ_VECTOR_STRUCT));
-    obj->vectors[obj->vectors_size - 1] = vec;
+    if (vec->type == VEC_TEXCOORD)
+    {
+        obj->texture_vectors_size += 1;
+        obj->texture_vectors = realloc(obj->texture_vectors, obj->texture_vectors_size * sizeof(struct OBJ_VECTOR_STRUCT));
+        obj->texture_vectors[obj->texture_vectors_size - 1] = vec;
+    }
+    else
+    {
+        obj->vectors_size += 1;
+        obj->vectors = realloc(obj->vectors, obj->vectors_size * sizeof(struct OBJ_VECTOR_STRUCT));
+        obj->vectors[obj->vectors_size - 1] = vec;
+    }
 }
 
 void parser_parse_face(parser_T* parser)

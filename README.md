@@ -9,56 +9,32 @@
 
 int main(int argc, char* argv[])
 {
-    obj_T* obj = obj_load_from_file("shards/teapot.obj");
+    obj_list_T* object_list = obj_load_from_file(argv[1]);
+    obj_T* obj = object_list->objects[0];
 
-    for (int i = 0; i < obj->vectors_size; i++)
+
+    for (int i = 0; i < obj->polygon_groups_size; i++)
     {
-        obj_vec_T* vec = obj->vectors[i];
+        obj_polygon_group_T* group = obj->polygon_groups[i];
+        printf("Face group: %s\n", group->name);
 
-        switch (vec->type)
+        for (int j = 0; j < group->faces_size; j++)
         {
-            case VEC_VERTICE: {
-                printf("Its a vertice!\n");
-            } break;
-            case VEC_TEXCOORD: {
-                printf("Its a texcoord!\n");
-            } break;
-            case VEC_NORMAL: {
-                printf("Its a normal!\n");
-            } break;
+            obj_face_T* face = group->faces[j];
+
+            printf("vertex_pointers:\n");
+
+            for (int k = 0; k < face->vertex_pointers_size; k++)
+            {
+                unsigned int pointer = face->vertex_pointers[k];
+                obj_vec_T* vec = obj->vertice_vectors[pointer - 1];
+
+                printf("pointer %d pointing to vertex: {%0.6f, %0.6f, %0.6f}\n", pointer, vec->x, vec->y, vec->z);
+            }
         }
-
-        printf("(%0.6f, %0.6f, %0.6f)\n", vec->x, vec->y, vec->z);
     }
 
-    for (int i = 0; i < obj->faces_size; i++)
-    {
-        obj_face_T* face = obj->faces[i];
-
-        printf(
-            "Face vertex_pointers(%d, %d, %d)\n",
-            face->vertex_pointers[0],
-            face->vertex_pointers[1],
-            face->vertex_pointers[2]
-        );
-        
-        printf(
-            "Face texcoord_pointers(%d, %d, %d)\n",
-            face->texcoord_pointers[0],
-            face->texcoord_pointers[1],
-            face->texcoord_pointers[2]
-        );
-
-        printf(
-            "Face normal_pointers(%d, %d, %d)\n",
-            face->normal_pointers[0],
-            face->normal_pointers[1],
-            face->normal_pointers[2]
-        );
-    }
-
-    // dont forget to free it
-    obj_free(obj);
+    obj_list_free(object_list);
 
     return 0;
 }

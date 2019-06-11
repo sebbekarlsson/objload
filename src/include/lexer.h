@@ -34,8 +34,6 @@ token_T* lexer_collect_number(lexer_T* lexer);
 
 token_T* lexer_collect_id(lexer_T* lexer);
 
-token_T* lexer_collect_object_name(lexer_T* lexer);
-
 void lexer_dump(lexer_T* lexer);
 
 void lexer_free(lexer_T* lexer);

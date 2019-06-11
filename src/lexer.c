@@ -27,7 +27,7 @@ lexer_T* init_lexer(char* contents)
 
 token_T* lexer_get_next_token(lexer_T* lexer)
 {
-    while (lexer->current_char != '\0' && lexer->char_index < strlen(lexer->contents) - 1)
+    while (lexer->char_index < strlen(lexer->contents) - 1)
     {
         while (lexer->current_char == '#')
         {
@@ -41,20 +41,8 @@ token_T* lexer_get_next_token(lexer_T* lexer)
             lexer_advance(lexer);
         }
 
-        while (lexer->current_char == ' ' || (int) lexer->current_char == 10 || (int) lexer->current_char == 13)
+        while (lexer->current_char == ' ' || (int) lexer->current_char == 13)
             lexer_skip_whitespace(lexer);
-
-        if (lexer->current_char == 'o' || lexer->current_char == 'g')
-        {
-            lexer_advance(lexer);
-
-            if (lexer->current_char == ' ')
-            {
-                lexer_advance(lexer);
-
-                return lexer_collect_object_name(lexer);
-            }
-        }
 
         if (isdigit(lexer->current_char) || lexer->current_char == '-')
             return lexer_collect_number(lexer);
@@ -140,6 +128,7 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         {
             case '"': return lexer_collect_string(lexer); break;
             case '\'': return lexer_collect_char(lexer); break;
+            case 10: return lexer_advance_with_token(lexer, TOKEN_NEWLINE); break;
             case '{': return lexer_advance_with_token(lexer, TOKEN_LBRACE); break;
             case '}': return lexer_advance_with_token(lexer, TOKEN_RBRACE); break;
             case '[': return lexer_advance_with_token(lexer, TOKEN_LBRACKET); break;
@@ -158,7 +147,7 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         }
     }
 
-    init_token(TOKEN_EOF, "\0");
+    return init_token(TOKEN_EOF, char_to_string(lexer->current_char));
 }
 
 token_T* lexer_advance_with_token(lexer_T* lexer, int type)
@@ -191,7 +180,7 @@ void lexer_expect_char(lexer_T* lexer, char c)
 
 void lexer_skip_whitespace(lexer_T* lexer)
 {
-    while (lexer->current_char == ' ' || (int) lexer->current_char == 10 || (int) lexer->current_char == 13)
+    while (lexer->current_char == ' ' || (int) lexer->current_char == 13)
         lexer_advance(lexer);
 }
 
@@ -307,24 +296,6 @@ token_T* lexer_collect_id(lexer_T* lexer)
     }
 
     return init_token(TOKEN_ID, buffer);
-}
-
-token_T* lexer_collect_object_name(lexer_T* lexer)
-{
-    char* buffer = calloc(1, sizeof(char));
-    buffer[0] = '\0';
-
-    while (lexer->current_char != '\n' && lexer->current_char != 13 && lexer->current_char != 10)
-    {
-        char* strchar = char_to_string(lexer->current_char);
-        buffer = realloc(buffer, strlen(buffer) + 2);
-        strcat(buffer, strchar);
-        free(strchar);
-
-        lexer_advance(lexer);
-    }
-
-    return init_token(TOKEN_OBJECT_NAME, buffer);
 }
 
 void lexer_dump(lexer_T* lexer)

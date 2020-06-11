@@ -107,7 +107,7 @@ void parser_parse_statement(parser_T* parser, obj_polygon_group_T* polygon_group
        }
        else
        if (strcmp(parser->current_token->value, "f") == 0)
-       {
+       { 
            parser_parse_face(parser, polygon_group);
        }
        else
@@ -129,6 +129,10 @@ void parser_parse_statement(parser_T* parser, obj_polygon_group_T* polygon_group
        if (strcmp(parser->current_token->value, "l") == 0)
        {
            parser_parse_polyline(parser);
+       }
+       else if (strcmp(parser->current_token->value, "g") == 0)
+       {
+           parser_parse(parser);
        }
        else
        {
@@ -279,7 +283,7 @@ void parser_parse_face(parser_T* parser, obj_polygon_group_T* polygon_group)
     face->normal_pointers = calloc(1, sizeof(unsigned int));
 
     while (parser->current_token->type == TOKEN_INTEGER_VALUE)
-    {
+    { 
         face->vertex_pointers_size += 1;
         face->vertex_pointers = realloc(face->vertex_pointers, face->vertex_pointers_size * sizeof(unsigned int));
         face->vertex_pointers[face->vertex_pointers_size - 1] = atoi(parser->current_token->value);
@@ -347,7 +351,6 @@ obj_polygon_group_T* parser_parse_polygon_group(parser_T* parser)
         group_name = realloc(group_name, sizeof(char) * (strlen(group_name) + strlen(parser->current_token->value) + 1));
         strcat(group_name, parser->current_token->value);
         parser_eat(parser, TOKEN_ID);
-
     }
 
     polygon_group->name = group_name;
@@ -420,15 +423,20 @@ void parser_parse_smooth_bool(parser_T* parser, obj_polygon_group_T* polygon_gro
 {
     parser_eat(parser, TOKEN_ID); // s
 
-    if (strcmp(parser->current_token->value, "off") == 0 || strcmp(parser->current_token->value, "0") == 0)
+    if (strcmp(parser->current_token->value, "off") == 0)
     {
         polygon_group->smooth = 0;
         parser_eat(parser, parser->current_token->type);
     }
     else
-    if (strcmp(parser->current_token->value, "on") == 0 || strcmp(parser->current_token->value, "1") == 0)
+    if (strcmp(parser->current_token->value, "on") == 0)
     {
         polygon_group->smooth = 1;
+        parser_eat(parser, parser->current_token->type);
+    }
+    else
+    {
+        polygon_group->smooth = (unsigned int) atoi(parser->current_token->value);
         parser_eat(parser, parser->current_token->type);
     }
 }

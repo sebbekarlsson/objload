@@ -59,9 +59,13 @@ void parser_parse(parser_T* parser)
             polygon_group->faces = calloc(1, sizeof(struct OBJ_FACE_STRUCT));
             polygon_group->faces_size = 0;
             polygon_group->name = "global";
-        } 
+        }
 
-        parser_parse_statement(parser, polygon_group);
+        if (parser->current_token->type == TOKEN_EOF)
+            break;
+
+        parser_parse_statement(parser, polygon_group); 
+
 
         while (parser->current_token->type == TOKEN_NEWLINE)
         {
@@ -128,10 +132,10 @@ void parser_parse_statement(parser_T* parser, obj_polygon_group_T* polygon_group
        }
        else
        {
-           printf("Unhandled ID value=%s\n", parser->current_token->value);
+           printf("(Line: %d) Unhandled ID value=%s\n", parser->lexer->line_n, parser->current_token->value);
        }
     }
-    else if (parser->current_token->type != TOKEN_NEWLINE)
+    else if (parser->current_token->type != TOKEN_NEWLINE && parser->current_token->type != TOKEN_EOF)
     {
         printf("(Line: %d) Unhandled token type=%d value=%s\n", parser->lexer->line_n, parser->current_token->type, parser->current_token->value);
     }
@@ -150,25 +154,25 @@ void parser_parse_vertice_vector(parser_T* parser)
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->x = atof(parser->current_token->value);
+        vec->x = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->y = atof(parser->current_token->value);
+        vec->y = parser->current_token->float_value;
+        parser_eat(parser, parser->current_token->type);
+    } 
+
+    if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
+    {
+        vec->z = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->z = atof(parser->current_token->value);
-        parser_eat(parser, parser->current_token->type);
-    }
-
-    if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
-    {
-        vec->w = atof(parser->current_token->value);
+        vec->w = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
@@ -190,25 +194,25 @@ void parser_parse_texcoord_vector(parser_T* parser)
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->x = atof(parser->current_token->value);
+        vec->x = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->y = atof(parser->current_token->value);
+        vec->y = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->z = atof(parser->current_token->value);
+        vec->z = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->w = atof(parser->current_token->value);
+        vec->w = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
@@ -230,25 +234,25 @@ void parser_parse_normal_vector(parser_T* parser)
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->x = atof(parser->current_token->value);
+        vec->x = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->y = atof(parser->current_token->value);
+        vec->y = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->z = atof(parser->current_token->value);
+        vec->z = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 
     if (parser->current_token->type == TOKEN_FLOAT_VALUE || parser->current_token->type == TOKEN_INTEGER_VALUE)
     {
-        vec->w = atof(parser->current_token->value);
+        vec->w = parser->current_token->float_value;
         parser_eat(parser, parser->current_token->type);
     }
 

@@ -266,7 +266,7 @@ token_T* lexer_collect_number(lexer_T* lexer)
 
         type = TOKEN_FLOAT_VALUE;
 
-        while (isdigit(lexer->current_char))
+        while (isdigit(lexer->current_char) || lexer->current_char == '-' || lexer->current_char == 'e')
         {
             char* strchar = char_to_string(lexer->current_char);
             buffer = realloc(buffer, strlen(buffer) + 2);
@@ -275,7 +275,7 @@ token_T* lexer_collect_number(lexer_T* lexer)
 
             lexer_advance(lexer);
         }
-    } 
+    }
 
     return init_token(type, buffer);
 }
